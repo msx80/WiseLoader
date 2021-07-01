@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/msx80/wiseloader.svg)](https://jitpack.io/#msx80/wiseloader)
+
 # WiseLoader
 
 WiseLoader (Whitelist Secured Environment Loader or something) is a Java Classloader that loads class from a given set of whitelist class names. Attempting to load classes not in the whitelist will result in an error
