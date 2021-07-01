@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/msx80/wiseloader.svg)](https://jitpack.io/#msx80/wiseloader)
+ ![CI](https://github.com/msx80/WiseLoader/actions/workflows/maven.yml/badge.svg) [![JitPack](https://jitpack.io/v/msx80/wiseloader.svg)](https://jitpack.io/#msx80/wiseloader)
 
 # WiseLoader
 
