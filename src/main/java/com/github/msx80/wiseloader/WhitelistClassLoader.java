@@ -21,6 +21,13 @@ public class WhitelistClassLoader extends ClassLoader
 		this.loader = loader;
 		this.allowedClasses.addAll(Arrays.asList(allowedClasses));
 	}
+    
+	public WhitelistClassLoader(BytesLoader loader, ClassLoader parent, String... allowedClasses) 
+	{
+		this.loader = loader;
+		this.parent = parent;
+		this.allowedClasses.addAll(Arrays.asList(allowedClasses));
+	}
 
 	public WhitelistClassLoader allowClasses(Collection<String> classes)
 	{
@@ -47,10 +54,10 @@ public class WhitelistClassLoader extends ClassLoader
     	{
     		if(name.startsWith("java"))
     		{
-    			throw new ClassNotAllowedException("Class "+name+" is not whitelisted.");
+    			throw new ClassNotAllowedException(name, "Class "+name+" is not whitelisted.");
     		}
     		Class<?> a = loadClassFromSecuredContext(name);
-    		if(a==null) throw new ClassNotAllowedException("Class "+name+" is not whitelisted and was not found secured context.");
+    		if(a==null) throw new ClassNotAllowedException(name, "Class "+name+" is not whitelisted and was not found secured context.");
     		return a;
     	}
 	}

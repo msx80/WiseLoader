@@ -11,9 +11,13 @@ public class JarLoader implements BytesLoader {
 	File file;
 	JarFile jarFile;
 	
-	public JarLoader(File file) throws Exception {
+	public JarLoader(File file)  {
 		this.file = file;
-		this.jarFile = new JarFile(file);
+		try {
+			this.jarFile = new JarFile(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override

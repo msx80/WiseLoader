@@ -1,4 +1,4 @@
-package com.github.msx80.wiseloader.loaders;
+package com.github.msx80.wiseloader.loaders.compiler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,10 +25,12 @@ import com.github.msx80.wiseloader.WhitelistClassLoader;
 public class CompilingLoader implements BytesLoader {
 
 	private Map<String, byte[]> files;
+	private ClassFolder[] classFolders;
 	
-	public CompilingLoader( Map<String, String> javaSources, Map<String, byte[]> extraResourceFiles)
+	public CompilingLoader( Map<String, String> javaSources, Map<String, byte[]> extraResourceFiles, ClassFolder... classFolders)
 	{
 		this.files = new HashMap<>();
+		this.classFolders = classFolders;
 		files.putAll(extraResourceFiles);
 		files.putAll(compileFromJava(javaSources));
 	}
@@ -60,7 +62,7 @@ public class CompilingLoader implements BytesLoader {
          Collection<JavaFileObject> compilationUnits = javaFileObjects.values();
         
          StandardJavaFileManager s_standardJavaFileManager = compiler.getStandardFileManager(null, null, null);
-         CustomJavaFileManager s_fileManager = new CustomJavaFileManager(s_standardJavaFileManager);
+         CustomJavaFileManager s_fileManager = new CustomJavaFileManager(s_standardJavaFileManager, classFolders);
          
         compiler.getTask(null, s_fileManager, new DiagnosticListener<JavaFileObject>() {
             @Override

@@ -1,4 +1,4 @@
-package com.github.msx80.wiseloader.loaders;
+package com.github.msx80.wiseloader.loaders.compiler;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,20 +24,38 @@ import javax.tools.StandardLocation;
 class CustomJavaFileManager implements JavaFileManager {
     private final StandardJavaFileManager fileManager;
     private final Map<String, ByteArrayOutputStream> buffers = new LinkedHashMap<String, ByteArrayOutputStream>();
+	private ClassFolder[] folders;
 
-    CustomJavaFileManager(StandardJavaFileManager fileManager) {
+    CustomJavaFileManager(StandardJavaFileManager fileManager, ClassFolder... folders) {
         this.fileManager = fileManager;
+        this.folders = folders;
     }
 
-    public ClassLoader getClassLoader(Location location) {
-        return fileManager.getClassLoader(location);
-    }
+
 
     public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse) throws IOException {
-        return fileManager.list(location, packageName, kinds, recurse);
+    	if(location.equals(StandardLocation.PLATFORM_CLASS_PATH)) 
+    	{
+    		// for platform stuff, lets call the parent manager
+	    	return fileManager.list(location, packageName, kinds, recurse);
+    	}
+    	else
+    	{
+    		// search within provided ClassFolders
+    		List<JavaFileObject> res = new ArrayList<>();
+    		String path = packageName.replace('.', '/');
+    		for (ClassFolder cf : folders) {
+				res.addAll(cf.list(path, kinds));
+			}
+    		return res;
+    	}
     }
 
     public String inferBinaryName(Location location, JavaFileObject file) {
+    	if(file instanceof Inferable)
+    	{
+    		return ((Inferable)file).inferBinaryName();
+    	}
         return fileManager.inferBinaryName(location, file);
     }
 
@@ -61,7 +81,9 @@ class CustomJavaFileManager implements JavaFileManager {
                 }
             };
         }
-        return fileManager.getJavaFileForInput(location, className, kind);
+        JavaFileObject jfo = fileManager.getJavaFileForInput(location, className, kind);
+        System.out.println("Returning java file: "+jfo);
+        return jfo;
     }
 
     public JavaFileObject getJavaFileForOutput(Location location, final String className, Kind kind, FileObject sibling) throws IOException {
@@ -106,7 +128,26 @@ class CustomJavaFileManager implements JavaFileManager {
         }
         return ret;
     }
-
+     
+     public ClassLoader getClassLoader(Location location) {
+     	//throw new UnsupportedOperationException();
+         return new ClassLoader()
+         {
+         	 protected Class<?> findClass(String name) throws ClassNotFoundException {
+         	        throw new UnsupportedOperationException();
+         	    }
+             protected Class<?> loadClass(String name, boolean resolve)
+                     throws ClassNotFoundException
+                 {
+             	throw new UnsupportedOperationException();
+                 }
+         	public Class<?> loadClass(String name) throws ClassNotFoundException 
+             {
+         		throw new UnsupportedOperationException();
+         	}	
+         }; 
+     }
+     
      //
      
      /*

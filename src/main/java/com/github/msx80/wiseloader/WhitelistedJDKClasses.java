@@ -10,6 +10,11 @@ public class WhitelistedJDKClasses {
 			"java.math.BigInteger",
 			"java.math.BigDecimal",
 			"java.io.ByteArrayInputStream",
+			"java.io.ByteArrayOutputStream",
+			"java.io.InputStream", // abstract, access nothing
+			"java.io.OutputStream", // abstract, access nothing
+			"java.util.zip.GZIPInputStream", // based on InputStream, no access to resources
+			"java.util.zip.GZIPOutputStream", // based on OutputStream, no access to resources
 			"java.io.IOException",
 			"java.io.Serializable",
 			"java.io.EOFException",
@@ -32,6 +37,7 @@ public class WhitelistedJDKClasses {
 			"java.lang.Object",
 			"java.lang.Runnable",
 			"java.lang.RuntimeException",
+			"java.lang.IllegalArgumentException",
 			"java.lang.String",
 			"java.lang.StringBuilder",
 			"java.lang.Throwable",
@@ -78,5 +84,6 @@ public class WhitelistedJDKClasses {
 			"java.lang.System", // has exit(), loadLibrary(), etc..
 			"java.lang.Runtime", // can execute processes, exit() etc..
 			"java.lang.Thread", // not exacly bad per se but probably is not ok to start threads
+			"java.lang.Process", // can start external programs
 		};
 }

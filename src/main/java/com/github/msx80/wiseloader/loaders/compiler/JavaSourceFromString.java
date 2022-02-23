@@ -1,4 +1,4 @@
-package com.github.msx80.wiseloader.loaders;
+package com.github.msx80.wiseloader.loaders.compiler;
 
 import java.net.URI;
 
