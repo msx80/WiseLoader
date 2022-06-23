@@ -6,7 +6,7 @@ public class WhitelistedJDKClasses {
 	
 	public static final String[] LIST = 
 		{
-
+				
 			"java.math.BigInteger",
 			"java.math.BigDecimal",
 			"java.io.ByteArrayInputStream",
@@ -40,6 +40,7 @@ public class WhitelistedJDKClasses {
 			"java.lang.IllegalArgumentException",
 			"java.lang.String",
 			"java.lang.StringBuilder",
+			"java.lang.StringBuffer",
 			"java.lang.Throwable",
 			"java.lang.invoke.LambdaMetafactory",
 			"java.lang.invoke.StringConcatFactory", // TODO check this one
@@ -72,7 +73,11 @@ public class WhitelistedJDKClasses {
 			"java.util.regex.Pattern",
 			"java.util.stream.Collectors",
 			"java.util.stream.Stream", // imports java.nio.file.Files and java.nio.file.Path but doesn't seems to use it
-			
+			"java.io.Externalizable",
+			"java.lang.Cloneable",
+			"java.lang.UnsupportedOperationException",
+			"java.text.DecimalFormat",
+			"java.text.NumberFormat"
 		};
 	
 
