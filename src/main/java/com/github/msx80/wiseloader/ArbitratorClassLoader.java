@@ -9,17 +9,20 @@ public abstract class ArbitratorClassLoader extends ClassLoader
 
     private ClassLoader parent = ArbitratorClassLoader.class.getClassLoader();
 	private BytesLoader loader;
+	private boolean prioritizeParent;
     
-	public ArbitratorClassLoader(BytesLoader loader) 
+	public ArbitratorClassLoader(BytesLoader loader, boolean prioritizeParent) 
 	{
 		this.loader = loader;
+		this.prioritizeParent = prioritizeParent;
 
 	}
     
-	public ArbitratorClassLoader(BytesLoader loader, ClassLoader parent) 
+	public ArbitratorClassLoader(BytesLoader loader, ClassLoader parent, boolean prioritizeParent) 
 	{
 		this.loader = loader;
 		this.parent = parent;
+		this.prioritizeParent = prioritizeParent;
 	}
 
     @Override
@@ -65,13 +68,25 @@ public abstract class ArbitratorClassLoader extends ClassLoader
 
 	private Class<?> loadAllowedClass(String name) throws ClassNotFoundException {
 		// allowed class, try the parent classloader first and eventually try the custom loader
-		
-		try {
-			return parent.loadClass(name);
-		} catch (ClassNotFoundException e) {
-			Class<?> a = loadClassFromSecuredContext(name);
-			if(a==null) throw new ClassNotFoundException("Class "+name+" not found.");
-			return a;
+		if(prioritizeParent)
+		{
+			try {
+				return parent.loadClass(name);
+			} catch (ClassNotFoundException e) {
+				Class<?> a = loadClassFromSecuredContext(name);
+				if(a==null) throw new ClassNotFoundException("Class "+name+" not found.");
+				return a;
+			}
+		}
+		else
+		{
+			try {
+				Class<?> a = loadClassFromSecuredContext(name);
+				if(a==null) throw new ClassNotFoundException("Class "+name+" not found.");
+				return a;
+			} catch (ClassNotFoundException e) {
+				return parent.loadClass(name);
+			}
 		}
 	}
 

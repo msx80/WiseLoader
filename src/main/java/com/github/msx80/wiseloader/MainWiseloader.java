@@ -18,7 +18,7 @@ public class MainWiseloader {
 		testCompilation();
 		BytesLoader loader = new JarLoader(new File("C:\\Users\\niclugat\\dev\\omicron\\demo\\Snake\\SnakeMain.omicron"));
 		
-		WhitelistClassLoader d = new WhitelistClassLoader(loader, WhitelistedJDKClasses.LIST);
+		WhitelistClassLoader d = new WhitelistClassLoader(loader, true, WhitelistedJDKClasses.LIST);
 		//d.allowClasses("com.github.msx80.omicron.api.Game");
 		InputStream is = d.getResourceAsStream("/omicron/demo/snake/sheet2.png");
 		System.out.println("Resource: "+is);
@@ -33,7 +33,7 @@ public class MainWiseloader {
 		System.out.println(demo);
 		Map<String, String> classes = new HashMap<>();
 		classes.put("wise.demo.Demo", demo);
-		WhitelistClassLoader d = new WhitelistClassLoader(new CompilingLoader(classes, new HashMap<>()));
+		WhitelistClassLoader d = new WhitelistClassLoader(new CompilingLoader(classes, new HashMap<>()), true);
 		d.allowClasses(WhitelistedJDKClasses.LIST);
 		d.allowClasses(
 				"java.lang.Class",

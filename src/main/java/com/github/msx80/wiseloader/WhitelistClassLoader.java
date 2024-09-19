@@ -10,15 +10,15 @@ public class WhitelistClassLoader extends ArbitratorClassLoader
 {
     private final Set<String> allowedClasses = new HashSet<>();
 	
-	public WhitelistClassLoader(BytesLoader loader, String... allowedClasses) 
+	public WhitelistClassLoader(BytesLoader loader, boolean prioritizeParent, String... allowedClasses) 
 	{
-		super(loader);
+		super(loader, prioritizeParent);
 		this.allowedClasses.addAll(Arrays.asList(allowedClasses));
 	}
     
-	public WhitelistClassLoader(BytesLoader loader, ClassLoader parent, String... allowedClasses) 
+	public WhitelistClassLoader(BytesLoader loader, ClassLoader parent, boolean prioritizeParent, String... allowedClasses) 
 	{
-		super(loader, parent);
+		super(loader, parent, prioritizeParent);
 		this.allowedClasses.addAll(Arrays.asList(allowedClasses));
 	}
 
